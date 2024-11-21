@@ -1,41 +1,46 @@
-from crewai import Agent
+from crewai import Agent ,LLM
 from dotenv import load_dotenv
 from tools import tool
-from langchain_google_genai import ChatGoogleGenerativeAI
-from litellm import completion 
+from litellm import Huggingface
 import os
 
-##Lodaing env content
+# Load environment variables
 load_dotenv()
 
-##Creating a LLM instance 
-# Initialize LLM with error handling
-llm=completion(model="gemini/gemini-1.5-flash",
-                temperature=0.5,
-                google_api_key=os.getenv("GOOGLE_API_KEY"))
-## Creating generator agent
-generator=Agent(
+# Initialize Hugging Face LLM
+llm = LLM(
+    model="gpt-4",
+    temperature=0.7,
+    # base_url="https://api.openai.com/v1",
+    api_key=os.getenv("OPENAI_API_KEY")
+)
+
+# Create the generator agent
+generator = Agent(
     role="Passage generator and question framer",
-    goal="Generate a passage for {grade} students of difficulty level {level} and frame {question_nos} multiple choice questions repectively",
+    goal="Generate a passage for {grade} students of difficulty level {level} "
+         "and frame {question_nos} multiple-choice questions respectively.",
     verbose=True,
     memory=True,
     backstory=(
-       "You are responsible for creating knowledge-enhancing passages and questions suited for the grade level and difficulty specified by the user."
+        "You are responsible for creating knowledge-enhancing passages and questions "
+        "suited for the grade level and difficulty specified by the user."
     ),
     tools=[tool],
     llm=llm,
     allow_delegation=True
 )
 
-##Creating Evaluator agent for eavaluating the answers submited by students
-
+# Create the evaluator agent
 evaluator = Agent(
     role="Answer evaluator and scorer",
-    goal="Using the passage and questions generated, determine the correct answers and evaluate the student's answers. Provide a score and feedback based on performance.",
+    goal="Using the passage and questions generated, determine the correct answers and "
+         "evaluate the student's answers. Provide a score and feedback based on performance.",
     verbose=True,
     memory=True,
     backstory=(
-        "You are an evaluator who assesses student answers based on the passage and questions generated, automatically determining correct answers for scoring."
+        "You are an evaluator who assesses student answers based on the passage and questions generated, "
+        "automatically determining correct answers for scoring."
     ),
     tools=[tool],
     llm=llm,
