@@ -5,7 +5,7 @@ from agents import generator,evaluator
 ## Describing the Task of the generator agent
 generator_task = Task(
     description=(
-        "The generator agent is responsible for creating an educational passage for a specified grade level. "
+        "The generator agent is responsible for creating an descriptive educational passage for a specified grade level. "
         "This passage should be tailored to a difficulty level that aligns with the student's abilities. "
         "After generating the passage, the generator agent must also frame multiple-choice questions "
         "based on the passage content. These questions should be structured to assess the student's comprehension "
@@ -13,7 +13,7 @@ generator_task = Task(
         "and questions are contextually and grammatically accurate for the educational setting."
     ),
     expected_output=(
-        "A passage suitable for {grade} students, tailored to the {level} difficulty level. "
+        "A long descriptive passage suitable for {grade} students, tailored to the {level} difficulty level. "
         "This passage includes {question_nos} multiple-choice questions, each with four answer options. "
         "The passage and questions should be clear, educational, and aligned with the specified grade and "
         "difficulty level to ensure relevance and appropriateness."
